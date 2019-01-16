@@ -26,7 +26,7 @@ public class XPBoostExpansion extends PlaceholderExpansion {
         if (!canRegister()) {
             return false;
         }
-
+        
         plugin = (XPBoostMain) Bukkit.getPluginManager().getPlugin(getPlugin());
         if (plugin == null) {
             return false;
@@ -47,7 +47,7 @@ public class XPBoostExpansion extends PlaceholderExpansion {
 
     @Override
     public String getPlugin() {
-        return "XPboost";
+        return "XPBoost";
     }
 
     @Override
