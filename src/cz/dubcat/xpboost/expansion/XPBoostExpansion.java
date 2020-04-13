@@ -36,7 +36,7 @@ public class XPBoostExpansion extends PlaceholderExpansion {
         }
         
         for(Condition c : Condition.values()) {
-            conditionPlaceholders.put("xpboost_hasboost_" + c.name().toLowerCase(), c);
+            conditionPlaceholders.put("hasboost_" + c.name().toLowerCase(), c);
         }
 
         return PlaceholderAPI.registerPlaceholderHook(getIdentifier(), this);
