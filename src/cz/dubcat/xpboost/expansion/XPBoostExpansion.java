@@ -1,20 +1,23 @@
 package cz.dubcat.xpboost.expansion;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import cz.dubcat.xpboost.XPBoostMain;
+import cz.dubcat.xpboost.api.Condition;
 import cz.dubcat.xpboost.api.XPBoostAPI;
 import cz.dubcat.xpboost.constructors.XPBoost;
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class XPBoostExpansion extends PlaceholderExpansion {
 
     private XPBoostMain plugin;
+    private Map<String, Condition> conditionPlaceholders = new HashMap<>();
 
     @Override
     public boolean canRegister() {
@@ -30,6 +33,10 @@ public class XPBoostExpansion extends PlaceholderExpansion {
         plugin = (XPBoostMain) Bukkit.getPluginManager().getPlugin(getPlugin());
         if (plugin == null) {
             return false;
+        }
+        
+        for(Condition c : Condition.values()) {
+            conditionPlaceholders.put("xpboost_hasboost_" + c.name().toLowerCase(), c);
         }
 
         return PlaceholderAPI.registerPlaceholderHook(getIdentifier(), this);
@@ -61,13 +68,23 @@ public class XPBoostExpansion extends PlaceholderExpansion {
             return "";
         }
 
-        UUID id = p.getUniqueId();
+        UUID uuid = p.getUniqueId();
 
         if (identifier.equals("hasboost")) {
-            return XPBoostAPI.hasBoost(id) ? "yes" : "no";
+            return XPBoostAPI.hasBoost(uuid) ? "yes" : "no";
         }
 
-        XPBoost xpb = XPBoostAPI.getBoost(id);
+        if(conditionPlaceholders.containsKey(identifier)) {
+            XPBoost boost = XPBoostAPI.getBoost(uuid);
+            
+            if(boost != null) {
+                return boost.hasCondition(conditionPlaceholders.get(identifier)) ? "yes" : "no";
+            } else {
+                return "no";
+            }
+        }
+        
+        XPBoost xpb = XPBoostAPI.getBoost(uuid);
         if (xpb == null) {
             if (identifier.equals("boost_zero")) {
                 return String.valueOf(0);
