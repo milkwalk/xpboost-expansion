@@ -11,7 +11,6 @@ import cz.dubcat.xpboost.XPBoostMain;
 import cz.dubcat.xpboost.api.Condition;
 import cz.dubcat.xpboost.api.XPBoostAPI;
 import cz.dubcat.xpboost.constructors.XPBoost;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class XPBoostExpansion extends PlaceholderExpansion {
@@ -23,7 +22,7 @@ public class XPBoostExpansion extends PlaceholderExpansion {
     public boolean canRegister() {
         return Bukkit.getPluginManager().getPlugin(getPlugin()) != null;
     }
-
+    
     @Override
     public boolean register() {
         if (!canRegister()) {
@@ -38,8 +37,8 @@ public class XPBoostExpansion extends PlaceholderExpansion {
         for(Condition c : Condition.values()) {
             conditionPlaceholders.put("hasboost_" + c.name().toLowerCase(), c);
         }
-
-        return PlaceholderAPI.registerPlaceholderHook(getIdentifier(), this);
+        
+        return this.getPlaceholderAPI().getLocalExpansionManager().register(this);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class XPBoostExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "1.1.0";
+        return "1.1.1";
     }
 
     @Override
